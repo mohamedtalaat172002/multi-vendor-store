@@ -12,11 +12,26 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::all();
-        return view('dashboard.category.index', compact('categories'))
-            ->with('success', 'Categories retrieved successfully.');
+        $query = Category::query();
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->status === 'active') {
+            $query->where('status', 'active');
+        }
+
+        if ($request->status === 'inactive') {
+            $query->where('status', 'inactive');
+        }
+
+
+        $categories = $query->paginate(2);
+        return view('dashboard.category.index', compact('categories'));
+
     }
 
     /**

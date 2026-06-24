@@ -1,5 +1,5 @@
-@extends('adminlte::page');
-@section('title', 'categories');
+@extends('adminlte::page')
+@section('title', 'categories')
 @section('content_header')
 <div class="row">
     <div class="col-sm-6">
@@ -8,6 +8,53 @@
 </div>
 @stop
 @section('content')
+
+    <form action="{{ URL::current() }}" method="get" class="d-flex justify-content-between mb-4">
+
+        <div class="col-md-5">
+            <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ request('search') }}">
+        </div>
+
+        <select name="status" class="form-control mx-2">
+            <option value="">All</option>
+
+            <option value="active" @selected(request('status') == 'active')>
+                Active
+            </option>
+
+            <option value="inactive" @selected(request('status') == 'inactive')>
+                inactive
+            </option>
+        </select>
+
+        <button class="btn btn-dark mx-2">
+            Filter
+        </button>
+
+    </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     <div class="container">
@@ -86,4 +133,5 @@
             </div>
         </div>
     </div>
+    {{ $categories->withQueryString()->links() }}
 @endsection
