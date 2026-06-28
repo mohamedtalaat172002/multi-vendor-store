@@ -16,8 +16,10 @@
 
                 <div class="mb-3">
                     <label class="form-label">Category Name</label>
-                    <input type="text" name="name" class="form-control" value="{{ old('name', $category->name) }}"
-                        required>
+                    {{-- <input type="text" name="name" class="form-control" value="{{ old('name', $category->name) }}"
+                        required> --}}
+                    <x-form.input type="text" name="name" :value="old('name', $category->name)" required />
+
                     @error('name')
                         <div class="text-danger mt-1">{{ $message }}</div>
                     @enderror

@@ -32,35 +32,17 @@
         </button>
 
     </form>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <a href="{{ route('dashboard.categories.create') }}" class="btn btn-primary">Add New Category</a>
+
+
+        <div class="d-flex align-items-center mb-4">
+            <a href="{{ route('dashboard.categories.create') }}" class="btn btn-primary me-2">Add New Category</a>
+
+            <a href="{{ route('dashboard.categories.trashed') }}" class="btn btn-secondary">View Trashed Categories</a>
         </div>
+
+
+
 
         @if(session('success'))
             <div class="alert alert-success">
@@ -89,7 +71,7 @@
 
                                     <td class="fw-bold">{{ $category->name }}</td>
                                     <td>{{ $category->description }}</td>
-                                    <td>{{ $category->parent->name ?? '---' }}</td>
+                                    <td>{{ $category->parent_name ?? 'No parent' }}</td>
 
                                     <td>
                                         <span class="badge {{ $category->status == 'active' ? 'bg-success' : 'bg-danger' }}">

@@ -14,22 +14,14 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Category::query();
-
-        if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
-        }
-
-        if ($request->status === 'active') {
-            $query->where('status', 'active');
-        }
-
-        if ($request->status === 'inactive') {
-            $query->where('status', 'inactive');
-        }
+        $categories = Category::leftJoin('categories as parents', 'categories.parent_id', '=', 'parents.id')
+            ->select('categories.*', 'parents.name as parent_name')
+            ->active($request->status)
+            ->Search($request->only('search'))->
+            paginate(2);
 
 
-        $categories = $query->paginate(2);
+
         return view('dashboard.category.index', compact('categories'));
 
     }
@@ -132,4 +124,39 @@ class CategoryController extends Controller
 
         return redirect()->route('dashboard.categories.index')->with('success', 'Category deleted successfully.');
     }
+
+
+    public function restore($id)
+    {
+        $category = Category::withTrashed()->findOrFail($id);
+        $category->restore();
+
+        return redirect()->route('dashboard.categories.index')->with('success', 'Category restored successfully.');
+    }
+    public function forceDelete($id)
+    {
+        $category = Category::withTrashed()->findOrFail($id);
+        if ($category->image) {
+            \Storage::disk('public')->delete($category->image);
+        }
+        $category->forceDelete();
+
+        return redirect()->route('dashboard.categories.index')->with('success', 'Category permanently deleted successfully.');
+    }
+
+    public function trashed(Request $request)
+    {
+        $categories = Category::onlyTrashed()
+            ->leftJoin('categories as parents', 'categories.parent_id', '=', 'parents.id')
+            ->select('categories.*', 'parents.name as parent_name')
+            ->active($request->status)
+            ->Search($request->only('search'))
+            ->paginate(2);
+        return view('dashboard.category.trashed', compact('categories'));
+
+
+
+    }
+
+
 }
