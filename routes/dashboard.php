@@ -1,15 +1,16 @@
 <?php
 use App\Http\Controllers\dashboard\CategoryController;
-
+use App\Http\Middleware\CheckUserType;
 Route::group([
+    'middleware' => ['auth', CheckUserType::class],
     'prefix' => 'dashboard',
     'as' => 'dashboard.',
-    // 'middleware' => ['auth']],
+
 ], function () {
     Route::get('/categories/trashed', [CategoryController::class, 'trashed'])->name('categories.trashed');
 
     Route::resource('/categories', CategoryController::class);
-
+    Route::resource('/products', \App\Http\Controllers\dashboard\ProductController::class);
 
 });
 Route::patch('/categories/{id}/restore', [CategoryController::class, 'restore'])->name('dashboard.categories.restore');

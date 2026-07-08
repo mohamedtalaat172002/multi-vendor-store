@@ -5,10 +5,14 @@ use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Attributes\UseFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Category extends Model
 {
     use SoftDeletes;
-    //
+
+    use HasFactory;
+
     protected $guarded = [];
 
 
@@ -34,5 +38,24 @@ class Category extends Model
             $query->where('name', 'like', '%' . $name . '%');
         });
     }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+
+    public function parent()
+    {
+        return $this->belongsTo(Category::class, 'parent_id')->withDefault([
+            'name' => 'No Parent',
+        ]);
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
+    }
+
 
 }

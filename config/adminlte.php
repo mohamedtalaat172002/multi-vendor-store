@@ -330,7 +330,7 @@ return [
         ['header' => 'account_settings'],
         [
             'text' => 'profile',
-            'url' => 'admin/settings',
+            'url' => '/profile',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
@@ -388,9 +388,14 @@ return [
             'url' => '#',
         ],
         [
-            'text' => 'information',
+            'text' => 'categories',
             'icon_color' => 'cyan',
-            'url' => '#',
+            'url' => 'dashboard/categories',
+        ],
+        [
+            'text' => 'products',
+            'icon_color' => 'cyan',
+            'url' => 'dashboard/products',
         ],
     ],
 

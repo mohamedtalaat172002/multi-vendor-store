@@ -11,11 +11,17 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+
+
+
+
+
     /**
      * Display the user's profile form.
      */
     public function edit(Request $request): View
     {
+
         return view('profile.edit', [
             'user' => $request->user(),
         ]);
@@ -24,9 +30,43 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
+
+    /* 
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $request->validate([
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'birthday' => ['nullable', 'date', 'before:today'],
+            'gender' => ['in:male,female'],
+            'country' => ['required', 'string', 'size:2'],
+        ]);
+        $user = $request->user();
+        $user->profile->fill($request->all())->save();
+        if ($user->profile) {
+            $user->profile->update([
+                'phone' => $request->input('phone'),
+                'address' => $request->input('address'),
+                'city' => $request->input('city'),
+                'state' => $request->input('state'),
+                'zip' => $request->input('zip'),
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+            ]);
+        } else {
+            $user->profile()->create([
+
+                'phone' => $request->input('phone'),
+                'address' => $request->input('address'),
+                'city' => $request->input('city'),
+                'state' => $request->input('state'),
+                'zip' => $request->input('zip'),
+
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+            ]);
+        }
+
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
@@ -36,6 +76,19 @@ class ProfileController extends Controller
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
+*/
+
+    public function update(ProfileUpdateRequest $request): RedirectResponse
+    {
+        $user = $request->user();
+        $user->fill($request->validated())->save();
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+
+
+
+
 
     /**
      * Delete the user's account.
