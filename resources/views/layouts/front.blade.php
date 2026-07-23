@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 
+@php use Illuminate\Support\Facades\Auth; @endphp
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>ShopGrids - Bootstrap 5 eCommerce HTML Template.</title>
+    <title>{{ $title ?? config('app.name') }}</title>
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/images/favicon.svg') }}" />
 
     <!-- ========================= CSS here ========================= -->
@@ -70,7 +72,7 @@
                     <div class="col-lg-4 col-md-4 col-12">
                         <div class="top-middle">
                             <ul class="useful-links">
-                                <li><a href="index.html">Home</a></li>
+                                <li><a href="{{ route('home') }}">Home</a></li>
                                 <li><a href="about-us.html">About Us</a></li>
                                 <li><a href="contact.html">Contact Us</a></li>
                             </ul>
@@ -80,15 +82,27 @@
                         <div class="top-end">
                             <div class="user">
                                 <i class="lni lni-user"></i>
-                                Hello
+                                @auth
+                                    <a href="{{ route('profile.edit') }}">{{ Auth::user()->name }}</a>
+                                @else
+                                    Hello
+                                @endauth
                             </div>
                             <ul class="user-login">
-                                <li>
-                                    <a href="login.html">Sign In</a>
-                                </li>
-                                <li>
-                                    <a href="register.html">Register</a>
-                                </li>
+                                @guest
+                                    <li><a href="{{ route('login') }}">Sign In</a></li>
+                                    <li><a href="{{ route('register') }}">Register</a></li>
+                                @else
+                                    <li>
+                                        <form method="POST" action="{{ route('logout') }}" style="display:inline;">
+                                            @csrf
+                                            <a href="{{ route('logout') }}"
+                                               onclick="event.preventDefault(); this.closest('form').submit();">
+                                                Sign Out
+                                            </a>
+                                        </form>
+                                    </li>
+                                @endguest
                             </ul>
                         </div>
                     </div>
@@ -102,7 +116,7 @@
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-md-3 col-7">
                         <!-- Start Header Logo -->
-                        <a class="navbar-brand" href="index.html">
+                        <a class="navbar-brand" href="{{ route('home') }}">
                             <img src="{{ asset('assets/images/logo/logo.svg') }}" alt="Logo">
                         </a>
                         <!-- End Header Logo -->
@@ -151,56 +165,10 @@
                                     </a>
                                 </div>
                                 <div class="cart-items">
-                                    <a href="javascript:void(0)" class="main-btn">
-                                        <i class="lni lni-cart"></i>
-                                        <span class="total-items">2</span>
-                                    </a>
                                     <!-- Shopping Item -->
-                                    <div class="shopping-item">
-                                        <div class="dropdown-cart-header">
-                                            <span>2 Items</span>
-                                            <a href="cart.html">View Cart</a>
-                                        </div>
-                                        <ul class="shopping-list">
-                                            <li>
-                                                <a href="javascript:void(0)" class="remove" title="Remove this item"><i
-                                                        class="lni lni-close"></i></a>
-                                                <div class="cart-img-head">
-                                                    <a class="cart-img" href="product-details.html"><img
-                                                            src="{{ asset('assets/images/header/cart-items/item1.jpg') }}"
-                                                            alt="#"></a>
-                                                </div>
+                                    <x-cart-menu>
 
-                                                <div class="content">
-                                                    <h4><a href="product-details.html">
-                                                            Apple Watch Series 6</a></h4>
-                                                    <p class="quantity">1x - <span class="amount">$99.00</span></p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:void(0)" class="remove" title="Remove this item"><i
-                                                        class="lni lni-close"></i></a>
-                                                <div class="cart-img-head">
-                                                    <a class="cart-img" href="product-details.html"><img
-                                                            src="{{ asset('assets/images/header/cart-items/item2.jpg') }}"
-                                                            alt="#"></a>
-                                                </div>
-                                                <div class="content">
-                                                    <h4><a href="product-details.html">Wi-Fi Smart Camera</a></h4>
-                                                    <p class="quantity">1x - <span class="amount">$35.00</span></p>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <div class="bottom">
-                                            <div class="total">
-                                                <span>Total</span>
-                                                <span class="total-amount">$134.00</span>
-                                            </div>
-                                            <div class="button">
-                                                <a href="checkout.html" class="btn animate">Checkout</a>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </x-cart-menu>
                                     <!--/ End Shopping Item -->
                                 </div>
                             </div>
@@ -259,7 +227,7 @@
                             <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
                                 <ul id="nav" class="navbar-nav ms-auto">
                                     <li class="nav-item">
-                                        <a href="index.html" class="active" aria-label="Toggle navigation">Home</a>
+                                        <a href="{{ route('home') }}" class="active" aria-label="Toggle navigation">Home</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="dd-menu collapsed" href="javascript:void(0)" data-bs-toggle="collapse"
@@ -268,8 +236,8 @@
                                         <ul class="sub-menu collapse" id="submenu-1-2">
                                             <li class="nav-item"><a href="about-us.html">About Us</a></li>
                                             <li class="nav-item"><a href="faq.html">Faq</a></li>
-                                            <li class="nav-item"><a href="login.html">Login</a></li>
-                                            <li class="nav-item"><a href="register.html">Register</a></li>
+                                            <li class="nav-item"><a href="{{ route('login') }}">Login</a></li>
+                                            <li class="nav-item"><a href="{{ route('register') }}">Register</a></li>
                                             <li class="nav-item"><a href="mail-success.html">Mail Success</a></li>
                                             <li class="nav-item"><a href="404.html">404 Error</a></li>
                                         </ul>
@@ -281,9 +249,9 @@
                                         <ul class="sub-menu collapse" id="submenu-1-3">
                                             <li class="nav-item"><a href="product-grids.html">Shop Grid</a></li>
                                             <li class="nav-item"><a href="product-list.html">Shop List</a></li>
-                                            <li class="nav-item"><a href="product-details.html">shop Single</a></li>
-                                            <li class="nav-item"><a href="cart.html">Cart</a></li>
-                                            <li class="nav-item"><a href="checkout.html">Checkout</a></li>
+                                            <li class="nav-item"><a href="product-details.html">Shop Single</a></li>
+                                            <li class="nav-item"><a href="{{ route('cart.index') }}">Cart</a></li>
+                                            <li class="nav-item"><a href="{{ route('checkout.create') }}">Checkout</a></li>
                                         </ul>
                                     </li>
                                     <li class="nav-item">
@@ -295,7 +263,7 @@
                                             </li>
                                             <li class="nav-item"><a href="blog-single.html">Blog Single</a></li>
                                             <li class="nav-item"><a href="blog-single-sidebar.html">Blog Single
-                                                    Sibebar</a></li>
+                                                    Sidebar</a></li>
                                         </ul>
                                     </li>
                                     <li class="nav-item">
@@ -338,6 +306,10 @@
 
     <div>
 
+        @isset($breadcrumb)
+            {{ $breadcrumb }}
+        @endisset
+
         {{ $slot }}
 
     </div>
@@ -358,7 +330,7 @@
                     <div class="row">
                         <div class="col-lg-3 col-md-4 col-12">
                             <div class="footer-logo">
-                                <a href="index.html">
+                                <a href="{{ route('home') }}">
                                     <img src="{{ asset('assets/images/logo/white-logo.svg') }}" alt="#">
                                 </a>
                             </div>
@@ -546,6 +518,8 @@
             }
         });
     </script>
+
+    @stack('scripts')
 </body>
 
 </html>

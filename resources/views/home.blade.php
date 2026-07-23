@@ -1,6 +1,4 @@
 <x-front-layout title="Home Page">
-
-
     <!-- Start Hero Area -->
     <section class="hero-area">
         <div class="container">
@@ -108,14 +106,4 @@
         </div>
     </section>
     <!-- End Trending Product Area -->
-
-
-
-
-
-
-
-
-
-
 </x-front-layout>

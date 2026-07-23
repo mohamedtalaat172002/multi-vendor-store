@@ -51,7 +51,7 @@
                             <p class="category"><i class="lni lni-tag"></i> Drones:<a
                                     href="javascript:void(0)">{{ $product->category->name }}</a></p>
                             <p class="info-text">{{ $product->description }}</p>
-                            <form action="#" method="post">
+                            <form action="{{ route('cart.store') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="product_id" value="{{ $product->id }}">
                                 <div class="row">
@@ -76,16 +76,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-12">
-                                        <div class="form-group">
-                                            <label for="color">Battery capacity</label>
-                                            <select class="form-control" id="color">
-                                                <option>5100 mAh</option>
-                                                <option>6200 mAh</option>
-                                                <option>8000 mAh</option>
-                                            </select>
-                                        </div>
-                                    </div>
+
                                     <div class="col-lg-4 col-md-4 col-12">
                                         <div class="form-group quantity">
                                             <label for="color">Quantity</label>
